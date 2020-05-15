@@ -7,8 +7,7 @@ buildscript {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
-apply plugin: 'net.minecraftforge.gradle.forge'
-//Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+apply plugin: "net.minecraftforge.gradle.forge"
 
 
 version = "1.12.2-0.1.2.7"
@@ -59,7 +58,7 @@ dependencies {
     // for more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
-
+    compile fileTree(include: ["*.jar"], dir: "libs")
 }
 
 processResources {
@@ -74,9 +73,11 @@ processResources {
         // replace version and mcversion
         expand 'version':project.version, 'mcversion':project.minecraft.version
     }
+
         
     // copy everything else except the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
 }
+
