@@ -5,6 +5,7 @@ import de.mennomax.astikorcarts.config.ModConfig;
 import de.mennomax.astikorcarts.init.ModItems;
 import net.dries007.tfc.api.types.Metal;
 import net.dries007.tfc.api.types.Rock;
+import net.dries007.tfc.objects.blocks.BlockPlacedItemFlat;
 import net.dries007.tfc.objects.blocks.BlocksTFC;
 import net.dries007.tfc.objects.blocks.stone.BlockRockVariant;
 import net.dries007.tfc.objects.items.metal.ItemMetalTool;
@@ -99,7 +100,7 @@ public class EntityPlowCart extends AbstractDrawnInventory implements IInventory
                         {
                             handleTool(blockPos, i, player);
                         }
-                        else if (upMaterial == Material.PLANTS || upMaterial == Material.VINE)
+                        else if (upMaterial == Material.PLANTS || upMaterial == Material.VINE ||this.world.getBlockState(upPos).getBlock() instanceof BlockPlacedItemFlat)
                         {
                             this.world.destroyBlock(upPos, false);
                             handleTool(blockPos, i, player);
