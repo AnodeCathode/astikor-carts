@@ -20,7 +20,7 @@ public abstract class AbstractCartItem extends Item
     public AbstractCartItem(String name)
     {
         this.setRegistryName(AstikorCarts.MODID, name);
-        this.setUnlocalizedName(this.getRegistryName().toString());
+        this.setTranslationKey(this.getRegistryName().toString());
         this.setCreativeTab(ModCreativeTabs.astikor);
         this.setMaxStackSize(1);
     }

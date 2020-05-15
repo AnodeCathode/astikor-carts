@@ -51,7 +51,7 @@ public class CPacketActionKey implements IMessage
                             cart.setPulling(null);
                             return;
                         }
-                        if (new Vec3d(cart.posX - sender.posX, cart.posY - sender.posY, cart.posZ - sender.posZ).lengthVector() < new Vec3d(closest.posX - sender.posX, closest.posY - sender.posY, closest.posZ - sender.posZ).lengthVector())
+                        if (new Vec3d(cart.posX - sender.posX, cart.posY - sender.posY, cart.posZ - sender.posZ).length() < new Vec3d(closest.posX - sender.posX, closest.posY - sender.posY, closest.posZ - sender.posZ).length())
                         {
                             closest = cart;
                         }

@@ -9,7 +9,7 @@ public class ItemWheel extends Item
     public ItemWheel()
     {
         this.setRegistryName(AstikorCarts.MODID, "wheel");
-        this.setUnlocalizedName(this.getRegistryName().toString());
+        this.setTranslationKey(this.getRegistryName().toString());
         this.setCreativeTab(ModCreativeTabs.astikor);
     }
 }

@@ -3,6 +3,12 @@ package de.mennomax.astikorcarts.entity;
 import de.mennomax.astikorcarts.AstikorCarts;
 import de.mennomax.astikorcarts.config.ModConfig;
 import de.mennomax.astikorcarts.init.ModItems;
+import net.dries007.tfc.api.types.Metal;
+import net.dries007.tfc.api.types.Rock;
+import net.dries007.tfc.objects.blocks.BlocksTFC;
+import net.dries007.tfc.objects.blocks.stone.BlockRockVariant;
+import net.dries007.tfc.objects.items.metal.ItemMetalTool;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirt;
 import net.minecraft.block.material.Material;
@@ -11,6 +17,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.IInventoryChangedListener;
 import net.minecraft.item.Item;
@@ -22,6 +29,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -160,10 +168,27 @@ public class EntityPlowCart extends AbstractDrawnInventory implements IInventory
     {
         IBlockState state = this.world.getBlockState(pos);
         Block block = state.getBlock();
+
         ItemStack itemstack = this.inventory.getStackInSlot(slot);
-        if (itemstack.getItem() instanceof ItemHoe)
+        if (itemstack.getItem() instanceof ItemHoe || itemstack.getItem() instanceof net.dries007.tfc.objects.items.metal.ItemMetalHoe )
         {
-            if (block == Blocks.GRASS || block == Blocks.GRASS_PATH)
+            if (state.getBlock() instanceof BlockRockVariant){
+
+
+                BlockRockVariant blockRock = (BlockRockVariant) state.getBlock();
+                if (blockRock.getType() == Rock.Type.GRASS || blockRock.getType() == Rock.Type.DIRT)
+                {
+                    if (!world.isRemote)
+                    {
+                        world.playSound(null, pos, SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                        world.setBlockState(pos, BlockRockVariant.get(blockRock.getRock(), Rock.Type.FARMLAND).getDefaultState());
+                        damageAndUpdateOnBreak(slot, itemstack, player);
+
+                    }
+
+                }
+            }
+            else if (block == Blocks.GRASS || block == Blocks.GRASS_PATH)
             {
                 this.world.setBlockState(pos, Blocks.FARMLAND.getDefaultState(), 11);
                 damageAndUpdateOnBreak(slot, itemstack, player);
@@ -186,9 +211,21 @@ public class EntityPlowCart extends AbstractDrawnInventory implements IInventory
                 }
             }
         }
-        else if (itemstack.getItem() instanceof ItemSpade)
+        else if (itemstack.getItem() instanceof ItemSpade || itemstack.getItem().canHarvestBlock(state))
         {
-            if (block == Blocks.GRASS)
+
+            if (block instanceof BlockRockVariant)
+            {
+                BlockRockVariant rockVariant = (BlockRockVariant) block;
+                IBlockState iblockstate1 = BlockRockVariant.get(rockVariant.getRock(), Rock.Type.PATH).getDefaultState();
+                world.playSound(player, pos, SoundEvents.ITEM_SHOVEL_FLATTEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                if (!world.isRemote)
+                {
+                    world.setBlockState(pos, iblockstate1, 11);
+                    damageAndUpdateOnBreak(slot, itemstack, player);
+                }
+            }
+            else if (block == Blocks.GRASS)
             {
                 this.world.setBlockState(pos, Blocks.GRASS_PATH.getDefaultState());
                 damageAndUpdateOnBreak(slot, itemstack, player);
