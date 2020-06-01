@@ -16,7 +16,7 @@ file "build.properties" withReader {
     ext.config = new ConfigSlurper().parse prop
 }
 
-version = "1.12.2-0.1.2.7"
+version = "tnfc1.12.2-0.1.2.7"
 group = "de.mennomax.astikorcarts" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "astikorcarts"
 
